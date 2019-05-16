@@ -25,7 +25,7 @@ class AbstractResource(abc.ABC):
         self, method: str, url: str, params: dict = None, json: dict = None
     ) -> requests.Response:
         try:
-            response = self.session.request(method, url, json=json)
+            response = self.session.request(method, url, json=json, verify=False)
         except (
             requests.exceptions.ConnectionError,
             requests.exceptions.Timeout,
@@ -50,6 +50,7 @@ class AbstractEndpoint(AbstractResource):
         super().__init__(resource)
         self.url = urljoin(self.url, self.endpoint)
 
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def endpoint(self) -> str:
-        pass
+        raise NotImplementedError
